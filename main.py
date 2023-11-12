@@ -2,6 +2,9 @@
 import random
 from SheetSetup import *
 
+MAX_NUM_OF_ITEMS = 218
+TOTAL_COLS_PLAYER_CARD = 20
+TOTAL_ROWS_PLAYER_CARD = 14
 
 class PitchCallingCard:
     '''
@@ -15,20 +18,28 @@ class PitchCallingCard:
                         "W": 2, "B1": 2, "B3": 1, "H": 1, "EA": 1, "EP": 2, "HD": 2, "31": 2
                         }
         pitch_list = []
+
         for keys in pitching_dict:
             for i in range(pitching_dict[keys]):
                 pitch_list.append(keys)
-        pitch_list = random.sample(pitch_list, len(pitch_list)) #Randomize the list
-        return pitch_list #HAS TO BE LESS THAN 217 values
+
+        #Randomize the list
+        pitch_list = random.sample(pitch_list, len(pitch_list)) 
+        
+        #HAS TO BE LESS THAN 218 values
+        if len(pitch_list) < MAX_NUM_OF_ITEMS:
+            return pitch_list
+        
+        raise ValueError(f'Must have fewer than {MAX_NUM_OF_ITEMS} values')  
 
     def print_to_player_card(self, workbook):
         pitch_list = PitchCallingCard().create_pitching_list()
         ####  PRINT VALUES TO FIRST TABLE ###
         column = 2
         count = 1
-        for i in range(1, 14):
-            # j = get_column_letter(column)
-            for row in range(2, 20):
+        for i in range(1, TOTAL_ROWS_PLAYER_CARD):
+            for row in range(2, TOTAL_COLS_PLAYER_CARD):
+                # Skip the middle row that handles keys 30 through 55
                 if i == 7:
                     pass
                 else:
@@ -76,16 +87,16 @@ class CreateCard:
         self.file_path_name = file_path_name
 
     def create_player_and_coach_card(self):
-        #Open Workbook and Setup player and coach sheets
+        # Open Workbook and Setup player and coach sheets
         workbook = GeneralSheet().open_workbook(self.file_path_name)
         GeneralSheet().generateAllWorkbookFormatting(workbook, self.file_path_name)
 
-        #print values to player and coach sheets
+        # Print values to player and coach sheets
         PitchCallingCard().print_to_player_card(workbook)
         PitchCallingCard().print_to_coach_card(workbook)
         GeneralSheet().save_workbook(workbook, self.file_path_name)
 
 
 if __name__ == '__main__':
-    FILE_NAME = 'C:/Users/Drew/PycharmProjects/PitchCallingCard/PitchCallingCard.xlsx'
+    FILE_NAME = 'place file path here'
     CreateCard(FILE_NAME).create_player_and_coach_card()

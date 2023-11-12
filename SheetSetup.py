@@ -11,28 +11,45 @@ FASTBALL_FILL_COLOR = '79EA1C'
 CHANGEUP_FILL_COLOR = 'ECE024'
 CURVEBALL_FILL_COLOR = 'FA5252'
 
+# Constants for sheet formatting
+TOTAL_COLS_PLAYER_CARD = 20
+TOTAL_ROWS_PLAYER_CARD = 15
+
 class GeneralSheet:
     '''
-    General Sheet Commands - Open, Clear, Save
+    General Sheet Commands - Open, Clear, Save, Create
     '''
 
     def check_workbook_exists(self, file_path):
         return os.path.isfile(file_path)
+    
+    def create_workbook(self):
+        # Create a new workbook
+        workbook = openpyxl.Workbook()
+
+        # Create sheets
+        workbook.create_sheet("Coach")
+        workbook.create_sheet("Player")
+
+        # Remove the default sheet created by openpyxl
+        default_sheet = workbook.get_sheet_by_name("Sheet")
+        workbook.remove_sheet(default_sheet)
+
+        return workbook
+
+    def clear_sheet(self, sheet_name):
+        sheet_name.delete_cols(1, 200)
 
     def open_workbook(self, file_name):
         if GeneralSheet().check_workbook_exists(file_name):
             wb = openpyxl.load_workbook(file_name)
         else:
-            wb = openpyxl.Workbook()
-            wb.active.title = "Player"
-            wb.create_sheet("Coach")
+            wb = GeneralSheet().create_workbook()
+
         GeneralSheet().clear_sheet(wb['Player'])
         GeneralSheet().clear_sheet(wb['Coach'])
+        
         return wb
-
-    def clear_sheet(self, sheet_name):
-        sheet_name.delete_cols(1, 200)
-        sheet_name.delete_cols(1, 200)
 
     def save_workbook(self, wb, path):
         wb.save(path)
@@ -100,17 +117,18 @@ class PlayerSheet:
 
     def add_player_table_color(self, wb):
         playersheet = wb['Player']
+        fastball_key_values = ['FO', 'FI', 'FU', 'BF']
+        changeup_key_values = ['CI', 'CO']
+        curveball_key_values = ['RI', 'RO']
         
+        # Set variable to fill cells with correct color - FB = green, CR = Red, CHG = Yellow
         fastball_fill_cells = PatternFill(start_color=FASTBALL_FILL_COLOR, end_color=FASTBALL_FILL_COLOR, fill_type='solid')
         changeup_fill_cells = PatternFill(start_color=CHANGEUP_FILL_COLOR, end_color=CHANGEUP_FILL_COLOR, fill_type='solid')
         curveball_fill_cells = PatternFill(start_color=CURVEBALL_FILL_COLOR, end_color=CURVEBALL_FILL_COLOR, fill_type='solid')
 
-        fastball_key_values = ['FO', 'FI', 'FU', 'BF']
-        changeup_key_values = ['CI', 'CO']
-        curveball_key_values = ['RI', 'RO']
-
-        for i in range(1, 20):
-            for j in range(1, 15):
+        # Loop through player card, filling in color for applicable cells
+        for i in range(1, TOTAL_COLS_PLAYER_CARD):
+            for j in range(1, TOTAL_ROWS_PLAYER_CARD):
                 if playersheet[str(get_column_letter(i)) + str(j)].value in fastball_key_values:
                     playersheet[str(get_column_letter(i)) + str(j)].fill = fastball_fill_cells
                 # Changeup Color
@@ -125,12 +143,12 @@ class PlayerSheet:
         player_sheet = wb['Player']
         PlayerSheet().table_col_row_values(wb)
         PlayerSheet().set_border(player_sheet, 'A1:C5')
-        for i in range(1, 20):
-            for j in range(1, 15):
+        for i in range(1, TOTAL_COLS_PLAYER_CARD):
+            for j in range(1, TOTAL_ROWS_PLAYER_CARD):
                 PlayerSheet().set_border(player_sheet, str(get_column_letter(i)) + str(j) + ':' + str(get_column_letter(i)) + str(j))
 
-        for row in range(1, 25):
-            for col in range(1, 20):
+        for row in range(1, TOTAL_ROWS_PLAYER_CARD):
+            for col in range(1, TOTAL_COLS_PLAYER_CARD):
                 player_sheet.cell(row, col).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
 
 class CoachSheet:
