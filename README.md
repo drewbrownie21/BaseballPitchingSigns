@@ -11,8 +11,9 @@ To use, add desired folder path to main.py on line 101
 
 Player Card Example
 
-![image](https://github.com/drewbrownie21/BaseballPitchingSigns/assets/36270973/cb79f5e5-5dc2-4316-b6b6-a471d14c2473)
+![image](https://github.com/drewbrownie21/BaseballPitchingSigns/assets/36270973/fa902418-bca4-441d-b4c6-769066dd1c9b)
 
 Coach Card Example
 
-![image](https://github.com/drewbrownie21/BaseballPitchingSigns/assets/36270973/3d0c1247-1168-4c8c-be09-b8cc0233bfc0)
+![image](https://github.com/drewbrownie21/BaseballPitchingSigns/assets/36270973/94a4cb1e-ca02-450f-8972-d2419166ee4c)
+
