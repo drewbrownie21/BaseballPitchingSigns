@@ -1,6 +1,6 @@
 #Import
 import random
-from SheetSetup import *
+from SheetSetup import GeneralSheet, PlayerSheet
 
 MAX_NUM_OF_ITEMS = 218
 TOTAL_COLS_PLAYER_CARD = 20
@@ -98,5 +98,5 @@ class CreateCard:
 
 
 if __name__ == '__main__':
-    FILE_NAME = 'place file path here'
+    FILE_NAME = 'FILE_PATH'
     CreateCard(FILE_NAME).create_player_and_coach_card()
